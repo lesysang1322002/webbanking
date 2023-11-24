@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>web banking</title>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">QR CODE BANKING</a>
+          <div class="d-flex">
+            <button class="btn btn-outline-warning" id="read">Scan</button>
+          </div>
+        </div>
+      </nav>
+    <style>
+        /* CSS cho menu dropdown */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px; /* Khoảng cách giữa cột */
+        }
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+    
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+    
+        .dropdown:hover .dropdown-content {
+          display: block;
+        }
+        #imageToChange {
+            /* display: block;
+            margin: auto; */
+            max-width: 100%;
+            max-height: 100vh;
+        }
+        h5 {
+            text-align: center;
+        }
+        .item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .item span {
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .item strong {
+            text-align: right;
+        }
+      </style>
+</head>
+<body>
+    <div class="container mt-3">
+    <div class="column">
+        <div class="dropdown">
+            <button  type="button" class="btn btn-dark btn-outline-warning" onclick="toggleDropdown()">Cài Đặt</button>
+            <div class="dropdown-content">
+              <select id="input1">
+                <option value="970423">TP BANK</option>
+                <option value="970405">AgriBank</option>
+                <option value="970422">MB Bank</option>
+                <option value="970418">BIDV</option>
+                <option value="970432">VP Bank</option>
+                <option value="970432">Techcombank</option>
+                <option value="970443">SHB</option>
+                <option value="970403">Sacombank</option>
+                <option value="971005">ViettelMoney</option>
+                <option value="971011">VNPTMoney</option>
+              </select>
+              <br>
+              <input type="text" id="input2" placeholder="Nhập số tài khoản">
+              <br>
+              <input type="text" id="input3" placeholder="Nhập số tiền">
+              <button onclick="changeImage()">Cập nhật</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-dark btn-outline-warning" id="start">START</button>
+          <button type="button" class="btn btn-dark btn-outline-warning" id="stop">STOP</button>
+    </div>
+    <div class="column">
+        <img id="imageToChange" src="https://api.vietqr.io/image/970423-12221322002-4XOF9m0.jpg?accountName=LE%20SY%20SANG&amount=0&addInfo=Sang%20chuyen%20khoan">
+    </div>
+    <div class="column">
+            <h5>HÓA ĐƠN THANH TOÁN</h5>
+            <main>
+                <div class="item">
+                    <span><strong>Tên Sản Phẩm</strong></span>
+                    <span><strong>Số Lượng</strong></span>
+                    <span><strong>Giá Tiền</strong></span>
+                </div>
+    
+                <div class="item">
+                    <div id="Value1_1">
+                        <span></span>
+                    </div>
+                    <div id="Value1_2">
+                        <span></span>
+                    </div>
+                    <div id="Value1_3">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="item">
+                    <div id="Value2_1">
+                        <span></span>
+                    </div>
+                    <div id="Value2_2">
+                        <span></span>
+                    </div>
+                    <div id="Value2_3">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="item">
+                    <div id="Value3_1">
+                        <span></span>
+                    </div>
+                    <div id="Value3_2">
+                        <span></span>
+                    </div>
+                    <div id="Value3_3">
+                        <span></span>
+                    </div>
+                </div>
+    
+                <hr>
+    
+                <div class="item">
+                    <span><strong>Tổng cộng</strong></span>
+                    <span></span>
+                    <div id="Value4">
+                    <span><strong></strong></span>
+                </div>
+                </div>
+            </main>
+    </div>
+    </div>
+</body>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> 
+      <script>
+          var imgElement = document.getElementById("imageToChange");
+        function changeImage() {
+          var input1Value = document.getElementById("input1").value;
+          var input2Value = document.getElementById("input2").value;
+          var input3Value = document.getElementById("input3").value;
+          if ((imgElement && input1Value && input2Value)|| (imgElement && input1Value && input2Value && input3Value)) {
+              var baseUrl = "https://api.vietqr.io/image/";
+              var newImageUrl = baseUrl + input1Value + "-" + input2Value + "-4XOF9m0.jpg?accountName=LE%20SY%20SANG&amount=" + input3Value +"&addInfo=%20chuyen%20khoan" ;
+              console.log(newImageUrl);
+              imgElement.src = newImageUrl;
+          }}
+      function toggleDropdown() {
+        var dropdownContent = document.querySelector(".dropdown-content");
+        if (dropdownContent.style.display === "block") {
+          dropdownContent.style.display = "none";
+        } else {
+          dropdownContent.style.display = "block";
+        }
+      }
+      var deviceName = 'QR CODE';
+        var bleService = 'battery_service';
+        var bleCharacteristic = 'battery_level';
+        var bluetoothDeviceDetected;
+        var gattCharacteristic;
+        var sum = 0;
+        $(document).ready(function() {
+
+            $('#read').click(function() {
+                if (isWebBluetoothEnabled()) { 
+                    read(); 
+                }
+            })
+
+            $('#start').click(function() {
+                if (isWebBluetoothEnabled()) { 
+                    if (isWebBluetoothEnabled()) { start() }
+                }
+            })
+
+
+            $('#stop').click(function() {
+                if (isWebBluetoothEnabled()) { 
+                    stop(); 
+                }
+            })
+
+            $('#send').click(function(){
+              if (isWebBluetoothEnabled()) { 
+                    send(); 
+                }
+            });
+
+        });
+        function isWebBluetoothEnabled() {
+            if (!navigator.bluetooth) {
+            console.log('Web Bluetooth API is not available in this browser!');
+            log('Web Bluetooth API is not available in this browser!');
+            return false
+            }
+
+            return true
+        }
+
+        function getDeviceInfo() {
+            let options = {
+            optionalServices: [bleService],
+            filters: [
+                { "name": deviceName }
+            ]
+            }
+
+            console.log('Requesting any Bluetooth Device...');
+            log('Đang tìm thiết bị...');
+            return navigator.bluetooth.requestDevice(options).then(device => {
+                bluetoothDeviceDetected = device;
+                $('#read').text('Disconnect');
+            }).catch(error => {
+                console.log('Argh! ' + error);
+                log('Argh! ' + error);
+            })
+        }
+
+        function read() {
+            return (bluetoothDeviceDetected ? Promise.resolve() : getDeviceInfo())
+            .then(connectGATT)
+            .then(_ => {
+                console.log('Reading battery level...');
+                return gattCharacteristic.readValue();
+            })
+            .catch(error => {
+                console.log('Waiting to start reading: ' + error);
+                log('Waiting to start reading: ' + error);
+            })
+        }
+        function start() {
+            gattCharacteristic.startNotifications()
+            .then(_ => {
+                console.log('Start reading...');
+                log('Bắt đầu đo...');
+                document.querySelector('#start').disabled = true;
+                document.querySelector('#stop').disabled = false;
+            })
+            .catch(error => {
+                console.log('[ERROR] Start: ' + error);
+                log('[ERROR] Start: ' + error);
+            })
+        }
+
+        function stop() {
+            gattCharacteristic.stopNotifications().then(_ => {
+                console.log('Dừng đo...');
+                log('Stop reading...');
+                document.querySelector('#start').disabled = false;
+                document.querySelector('#stop').disabled = true;
+            })
+            .catch(error => {
+                console.log('[ERROR] Stop: ' + error);
+            })
+        }
+
+        function log(text) {
+            const now = new Date();
+            const prefixlog = now.getHours() + ':' + now.getMinutes() + ':'  + now.getSeconds() + '> ';
+
+            $('.text-log').val($('.text-log').val() + prefixlog + text + '\n');
+        }
+
+        function Thanhtoan(text){
+            var Value=text;
+            imgElement.src="https://api.vietqr.io/image/970423-12221322002-4XOF9m0.jpg?accountName=LE%20SY%20SANG&amount="+Value+"&addInfo=Sang%20chuyen%20khoan"
+        }
+
+        function connectGATT() {
+            if (bluetoothDeviceDetected.gatt.connected && gattCharacteristic) {
+                return Promise.resolve()
+            }
+
+            return bluetoothDeviceDetected.gatt.connect()
+            .then(server => {
+                console.log('Getting GATT Service...');
+                log('Đang kết nối với thiết bị...');
+                return server.getPrimaryService(bleService);
+            })
+            .then(service => {
+                console.log('Getting GATT Characteristic...');
+                log('Kết nối thành công');
+                return service.getCharacteristic(bleCharacteristic);
+            })
+            .then(characteristic => {
+                gattCharacteristic = characteristic
+                gattCharacteristic.addEventListener('characteristicvaluechanged', handleChangedValue)
+                document.querySelector('#start').disabled = false;
+                document.querySelector('#stop').disabled = true;
+            })
+        }
+
+    function handleChangedValue(event) {
+    let data = event.target.value;
+
+    // Khởi tạo một mảng để chứa dữ liệu từ mảng uint8_t
+    let dataArray = new Uint8Array(data.buffer);
+
+    // Khởi tạo chuỗi để chứa dữ liệu từ mảng uint8_t
+    let valueString = '';
+    let kytu=String.fromCharCode(dataArray[0]);
+    if(kytu==1){
+        logValue1_1("Chuot may tinh");
+        logValue1_2("1");
+        logValue1_3("$100000");
+    }
+    if(kytu==3){
+        logValue2_1("Tao-20k");
+        logValue2_2("158g");
+        logValue2_3("$3520");
+    }
+    if(kytu==9){
+        logValue3_1("Xoai-25k");
+        logValue3_2("373g");
+        logValue3_3("$9325");
+        logValue4("$112845");
+   }
+    //Lặp qua mảng để trích xuất dữ liệu từng phần tử
+    for (let i=0; i < dataArray.length; i++) {
+        valueString += String.fromCharCode(dataArray[i]);
+    }
+    sum += parseInt(valueString);
+    console.log(sum + "\n");
+    var kqua= sum.toString();
+    console.log(kqua);
+    var now = new Date();
+    console.log('> ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + ' battery level is ' + valueString);
+    $('#battery_level').text(kqua);
+    Thanhtoan(kqua);
+    }
+    function logValue1_1(text){
+        const navbarTitle = document.getElementById('Value1_1');
+        navbarTitle.textContent = text;
+    }
+    function logValue1_2(text){
+        const navbarTitle = document.getElementById('Value1_2');
+        navbarTitle.textContent = text;
+    }
+    function logValue1_3(text){
+        const navbarTitle = document.getElementById('Value1_3');
+        navbarTitle.textContent = text;
+    }
+    function logValue2_1(text){
+        const navbarTitle = document.getElementById('Value2_1');
+        navbarTitle.textContent = text;
+    }
+    function logValue2_2(text){
+        const navbarTitle = document.getElementById('Value2_2');
+        navbarTitle.textContent = text;
+    }
+    function logValue2_3(text){
+        const navbarTitle = document.getElementById('Value2_3');
+        navbarTitle.textContent = text;
+    }
+    function logValue3_1(text){
+        const navbarTitle = document.getElementById('Value3_1');
+        navbarTitle.textContent = text;
+    }
+    function logValue3_2(text){
+        const navbarTitle = document.getElementById('Value3_2');
+        navbarTitle.textContent = text;
+    }
+    function logValue3_3(text){
+        const navbarTitle = document.getElementById('Value3_3');
+        navbarTitle.textContent = text;
+    }
+    function logValue4(text){
+        const navbarTitle = document.getElementById('Value4');
+        navbarTitle.textContent = text;
+    }
+    </script>
+    </html>
